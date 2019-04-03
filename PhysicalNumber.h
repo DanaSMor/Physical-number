@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Unit.h"
+using namespace std;
 namespace ariel {
 class PhysicalNumber{
 private:
@@ -20,8 +21,17 @@ PhysicalNumber& operator+=(const PhysicalNumber& num2);
 PhysicalNumber operator-(const PhysicalNumber& num2)const;
 PhysicalNumber& operator-=(const PhysicalNumber& num2);
 PhysicalNumber& operator-();
-double getNum();
-
+bool operator<(const PhysicalNumber& num2)const;
+bool operator<=(const PhysicalNumber& num2)const;
+bool operator>(const PhysicalNumber& num2)const;
+bool operator>=(const PhysicalNumber& num2)const;
+bool operator!=(const PhysicalNumber& num2)const;
+bool operator==(const PhysicalNumber& num2)const;
+double getNum()const;
+int getSpecificUnit()const;
+//friend global IO operators
+friend ostream& operator<<(ostream& os, const PhysicalNumber& pn);
+friend istream& operator>>(istream& os, PhysicalNumber& pn);
 
 private:
 bool sameUnit(const PhysicalNumber& num2)const;

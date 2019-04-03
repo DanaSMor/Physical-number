@@ -4,9 +4,10 @@
 using namespace ariel;
 using namespace std;
 
+char units[9][5]={"cm","m","km","min","hour","g","kg","ton"};
+
 PhysicalNumber PhysicalNumber::operator+(const PhysicalNumber &num2) const
-{
-    
+{   
     if (!sameUnit(num2))
     {
         throw std::runtime_error("not the same units");
@@ -24,23 +25,20 @@ PhysicalNumber PhysicalNumber::operator+(const PhysicalNumber &num2) const
         case 0:{
         conNum1 = convertLength();
         conNum2 = num2.convertLength();
-        return PhysicalNumber(convert(unit,conNum1 + conNum2), unit);
         }
         break;
         case 1:{//time
         conNum1 = convertTime();
         conNum2 = num2.convertTime();
-        cout << "first app:"<<conNum1 + conNum2<< endl;
-        return PhysicalNumber(convert(unit,conNum1 + conNum2), unit);
         }
         break;
         case 2:{//weight
         conNum1 = convertWeight();
-        conNum2 = num2.convertWeight();
-        return PhysicalNumber(convert(unit,conNum1 + conNum2), unit);
+        conNum2 = num2.convertWeight();      
         }
         break;
     }
+    return PhysicalNumber(convert(unit,conNum1 + conNum2), unit);
 }
 
 PhysicalNumber& PhysicalNumber::operator+() 
@@ -68,9 +66,103 @@ PhysicalNumber& PhysicalNumber::operator-()
     num=num*-1;
 }
 
-////////private methods///////
-double PhysicalNumber::getNum()
+bool PhysicalNumber::operator<(const PhysicalNumber& num2)const
+{
+    if (!sameUnit(num2))
+    {
+        throw std::runtime_error("not the same units");
+    }
+    //same unit different type
+    int originalUnit = getUnit();
+    double conNum1, conNum2;
+    switch (originalUnit)
+    {   
+        //length
+        case 0:{
+        conNum1 = convertLength();
+        conNum2 = num2.convertLength();
+        }
+        break;
+        case 1:{//time
+        conNum1 = convertTime();
+        conNum2 = num2.convertTime();
+        }
+        break;
+        case 2:{//weight
+        conNum1 = convertWeight();
+        conNum2 = num2.convertWeight();
+        }
+        break;
+    }
+    return conNum1<conNum2;
+}
+bool PhysicalNumber::operator<=(const PhysicalNumber& num2)const
+{
+    return (*this==num2||*this<num2);
+}
+bool PhysicalNumber::operator>(const PhysicalNumber& num2)const
+{
+    return (num2<*this);
+}
+bool PhysicalNumber::operator>=(const PhysicalNumber& num2)const
+{
+    return (*this==num2||*this>num2);
+}
+bool PhysicalNumber::operator!=(const PhysicalNumber& num2)const
+{
+    return !(*this==num2);
+}
+bool PhysicalNumber::operator==(const PhysicalNumber& num2)const
+{
+    if (!sameUnit(num2))
+    {
+        throw std::runtime_error("not the same units");
+    }
+    if (sameType(num2)) //in case they are the same type
+    {
+        return num==num2.getNum();
+    }
+    //same unit different type
+    int originalUnit = getUnit();
+    double conNum1, conNum2;
+    switch (originalUnit)
+    {   
+        //length
+        case 0:{
+        conNum1 = convertLength();
+        conNum2 = num2.convertLength();
+        }
+        break;
+        case 1:{//time
+        conNum1 = convertTime();
+        conNum2 = num2.convertTime();
+        }
+        break;
+        case 2:{//weight
+        conNum1 = convertWeight();
+        conNum2 = num2.convertWeight();
+        }
+        break;
+    }
+    return conNum1 == conNum2;
+}
+//friends
+
+ostream& operator<<(ostream& os, const PhysicalNumber& pn)
+{
+    return (os<<pn.getNum()<<"["<<units[pn.getSpecificUnit()]<<"]");
+}
+istream& operator>>(istream& os, PhysicalNumber& pn)
+{
+
+}
+
+double PhysicalNumber::getNum()const
 {return num;}
+int PhysicalNumber::getSpecificUnit()const
+{return unit;}
+////////private methods///////
+
 bool PhysicalNumber::sameUnit(const PhysicalNumber &num2) const
 {
     return (unit / 3 == num2.unit / 3);
