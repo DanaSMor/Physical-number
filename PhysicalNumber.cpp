@@ -4,10 +4,10 @@
 using namespace ariel;
 using namespace std;
 
-char units[9][5]={"cm","m","km","sec","min","hour","g","kg","ton"};
+char units[9][5] = {"cm", "m", "km", "sec", "min", "hour", "g", "kg", "ton"};
 
 PhysicalNumber PhysicalNumber::operator+(const PhysicalNumber &num2) const
-{   
+{
     if (!sameUnit(num2))
     {
         throw std::runtime_error("not the same units");
@@ -20,53 +20,56 @@ PhysicalNumber PhysicalNumber::operator+(const PhysicalNumber &num2) const
     int originalUnit = getUnit();
     double conNum1, conNum2;
     switch (originalUnit)
-    {   
-        //length
-        case 0:{
+    {
+    //length
+    case 0:
+    {
         conNum1 = convertLength();
         conNum2 = num2.convertLength();
-        }
-        break;
-        case 1:{//time
+    }
+    break;
+    case 1:
+    { //time
         conNum1 = convertTime();
         conNum2 = num2.convertTime();
-        }
-        break;
-        case 2:{//weight
-        conNum1 = convertWeight();
-        conNum2 = num2.convertWeight();      
-        }
-        break;
     }
-    return PhysicalNumber(convert(unit,conNum1 + conNum2), unit);
+    break;
+    case 2:
+    { //weight
+        conNum1 = convertWeight();
+        conNum2 = num2.convertWeight();
+    }
+    break;
+    }
+    return PhysicalNumber(convert(unit, conNum1 + conNum2), unit);
 }
 
-PhysicalNumber& PhysicalNumber::operator+() 
+PhysicalNumber &PhysicalNumber::operator+()
 {
     return *this;
 }
-PhysicalNumber& PhysicalNumber::operator+=(const PhysicalNumber &num2)
+PhysicalNumber &PhysicalNumber::operator+=(const PhysicalNumber &num2)
 {
-    PhysicalNumber a=*this+num2;
-    num=a.getNum();    
+    PhysicalNumber a = *this + num2;
+    num = a.getNum();
     return *this;
 }
 PhysicalNumber PhysicalNumber::operator-(const PhysicalNumber &num2) const
 {
     return *this + PhysicalNumber((-1 * num2.num), num2.unit);
 }
-PhysicalNumber& PhysicalNumber::operator-=(const PhysicalNumber &num2)
+PhysicalNumber &PhysicalNumber::operator-=(const PhysicalNumber &num2)
 {
-    PhysicalNumber a=*this-num2;
-    num=a.getNum(); 
-    return *this; 
+    PhysicalNumber a = *this - num2;
+    num = a.getNum();
+    return *this;
 }
-PhysicalNumber PhysicalNumber::operator-()const 
+PhysicalNumber PhysicalNumber::operator-() const
 {
-    return PhysicalNumber(num*-1,unit);
+    return PhysicalNumber(num * -1, unit);
 }
 
-bool PhysicalNumber::operator<(const PhysicalNumber& num2)const
+bool PhysicalNumber::operator<(const PhysicalNumber &num2) const
 {
     if (!sameUnit(num2))
     {
@@ -76,43 +79,46 @@ bool PhysicalNumber::operator<(const PhysicalNumber& num2)const
     int originalUnit = getUnit();
     double conNum1, conNum2;
     switch (originalUnit)
-    {   
-        //length
-        case 0:{
+    {
+    //length
+    case 0:
+    {
         conNum1 = convertLength();
         conNum2 = num2.convertLength();
-        }
-        break;
-        case 1:{//time
+    }
+    break;
+    case 1:
+    { //time
         conNum1 = convertTime();
         conNum2 = num2.convertTime();
-        }
-        break;
-        case 2:{//weight
+    }
+    break;
+    case 2:
+    { //weight
         conNum1 = convertWeight();
         conNum2 = num2.convertWeight();
-        }
-        break;
     }
-    return conNum1<conNum2;
+    break;
+    }
+    return conNum1 < conNum2;
 }
-bool PhysicalNumber::operator<=(const PhysicalNumber& num2)const
+bool PhysicalNumber::operator<=(const PhysicalNumber &num2) const
 {
-    return (*this==num2||*this<num2);
+    return (*this == num2 || *this < num2);
 }
-bool PhysicalNumber::operator>(const PhysicalNumber& num2)const
+bool PhysicalNumber::operator>(const PhysicalNumber &num2) const
 {
-    return (num2<*this);
+    return (num2 < *this);
 }
-bool PhysicalNumber::operator>=(const PhysicalNumber& num2)const
+bool PhysicalNumber::operator>=(const PhysicalNumber &num2) const
 {
-    return (*this==num2||*this>num2);
+    return (*this == num2 || *this > num2);
 }
-bool PhysicalNumber::operator!=(const PhysicalNumber& num2)const
+bool PhysicalNumber::operator!=(const PhysicalNumber &num2) const
 {
-    return !(*this==num2);
+    return !(*this == num2);
 }
-bool PhysicalNumber::operator==(const PhysicalNumber& num2)const
+bool PhysicalNumber::operator==(const PhysicalNumber &num2) const
 {
     if (!sameUnit(num2))
     {
@@ -120,46 +126,105 @@ bool PhysicalNumber::operator==(const PhysicalNumber& num2)const
     }
     if (sameType(num2)) //in case they are the same type
     {
-        return num==num2.getNum();
+        return num == num2.getNum();
     }
     //same unit different type
     int originalUnit = getUnit();
     double conNum1, conNum2;
     switch (originalUnit)
-    {          
-        case 0:{//length
+    {
+    case 0:
+    { //length
         conNum1 = convertLength();
         conNum2 = num2.convertLength();
-        }
-        break;
-        case 1:{//time
+    }
+    break;
+    case 1:
+    { //time
         conNum1 = convertTime();
         conNum2 = num2.convertTime();
-        }
-        break;
-        case 2:{//weight
+    }
+    break;
+    case 2:
+    { //weight
         conNum1 = convertWeight();
         conNum2 = num2.convertWeight();
-        }
-        break;
+    }
+    break;
     }
     return conNum1 == conNum2;
 }
 //friends
 
-std::ostream& ariel::operator<<(ostream& os, const PhysicalNumber& pn)
+std::ostream &ariel::operator<<(ostream &os, const PhysicalNumber &pn)
 {
-    return (os<<pn.getNum()<<"["<<units[pn.getSpecificUnit()]<<"]");
-}
-std::istream& ariel::operator>>(istream& is, PhysicalNumber& pn)
-{
-    return is;
+    return (os << pn.getNum() << "[" << units[pn.getSpecificUnit()] << "]");
 }
 
-double PhysicalNumber::getNum()const
-{return num;}
-int PhysicalNumber::getSpecificUnit()const
-{return unit;}
+static istream &getAndCheckNextCharIs(istream &input, char expectedChar)
+{
+    char actualChar;
+    input >> actualChar;
+    if (!input)
+        return input;
+
+    if (actualChar != expectedChar)
+        // failbit is for format error
+        input.setstate(ios::failbit);
+    return input;
+}
+
+std::istream &ariel::operator>>(istream &input, PhysicalNumber &pn)
+{
+    int i=0;
+    double new_num;
+    string new_unit;
+
+    // remember place for rewinding
+    ios::pos_type startPosition = input.tellg();
+
+    if ((!(input >> new_num)) ||
+        (!getAndCheckNextCharIs(input, '[')) ||
+        (!(input >> new_unit)))// ||
+        //(!(getAndCheckNextCharIs(input, ']'))))
+    {
+        cout<<"new num"<<new_num<<endl;
+        
+        
+        cout<<new_unit<<endl;
+        // rewind on error
+        auto errorState = input.rdstate(); // remember error state
+        input.clear();                     // clear error so seekg will work
+        input.seekg(startPosition);        // rewind
+        input.clear(errorState);           // set back the error flag
+    }
+    else
+    {
+        for (i = 0; i < 9; i++)
+        {
+            if (units[i]==new_unit.substr(0,new_unit.size()-1))
+            {
+                //flag = true;
+                break;
+            }
+            
+        }
+        pn.num = new_num;       
+        pn.unit=Unit(i);
+
+    }
+
+    return input;
+}
+
+double PhysicalNumber::getNum() const
+{
+    return num;
+}
+int PhysicalNumber::getSpecificUnit() const
+{
+    return unit;
+}
 ////////private methods///////
 
 bool PhysicalNumber::sameUnit(const PhysicalNumber &num2) const
@@ -173,7 +238,9 @@ bool PhysicalNumber::sameType(const PhysicalNumber &num2) const
 //function that checks the type of the unit
 //0-length, 1-time, 2-weight
 int PhysicalNumber::getUnit() const
-{return unit/3;}
+{
+    return unit / 3;
+}
 
 double PhysicalNumber::convert(int type, double n) const
 {
@@ -183,7 +250,7 @@ double PhysicalNumber::convert(int type, double n) const
         return n;
         break;
     case 1:
-    
+
         return cmToM(n);
         break;
     case 2:
@@ -196,7 +263,7 @@ double PhysicalNumber::convert(int type, double n) const
         return sToMIN(n);
         break;
     case 5:
-    
+
         return sToHOUR(n);
         break;
     case 6:
@@ -227,7 +294,7 @@ double PhysicalNumber::convertLength() const
         break;
     case 2:
         convertNum = num * 100000;
-    
+
         break;
     }
     return convertNum;
