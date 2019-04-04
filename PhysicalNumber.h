@@ -1,4 +1,4 @@
-#include <iostream>
+
 #include "Unit.h"
 using namespace std;
 namespace ariel {
@@ -20,7 +20,7 @@ PhysicalNumber& operator+();
 PhysicalNumber& operator+=(const PhysicalNumber& num2);
 PhysicalNumber operator-(const PhysicalNumber& num2)const;
 PhysicalNumber& operator-=(const PhysicalNumber& num2);
-PhysicalNumber& operator-();
+PhysicalNumber operator-()const;
 bool operator<(const PhysicalNumber& num2)const;
 bool operator<=(const PhysicalNumber& num2)const;
 bool operator>(const PhysicalNumber& num2)const;

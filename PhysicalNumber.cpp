@@ -4,7 +4,7 @@
 using namespace ariel;
 using namespace std;
 
-char units[9][5]={"cm","m","km","min","hour","g","kg","ton"};
+char units[9][5]={"cm","m","km","sec","min","hour","g","kg","ton"};
 
 PhysicalNumber PhysicalNumber::operator+(const PhysicalNumber &num2) const
 {   
@@ -61,9 +61,9 @@ PhysicalNumber& PhysicalNumber::operator-=(const PhysicalNumber &num2)
     num=a.getNum(); 
     return *this; 
 }
-PhysicalNumber& PhysicalNumber::operator-() 
+PhysicalNumber PhysicalNumber::operator-()const 
 {
-    num=num*-1;
+    return PhysicalNumber(num*-1,unit);
 }
 
 bool PhysicalNumber::operator<(const PhysicalNumber& num2)const
@@ -126,9 +126,8 @@ bool PhysicalNumber::operator==(const PhysicalNumber& num2)const
     int originalUnit = getUnit();
     double conNum1, conNum2;
     switch (originalUnit)
-    {   
-        //length
-        case 0:{
+    {          
+        case 0:{//length
         conNum1 = convertLength();
         conNum2 = num2.convertLength();
         }
@@ -148,13 +147,13 @@ bool PhysicalNumber::operator==(const PhysicalNumber& num2)const
 }
 //friends
 
-ostream& operator<<(ostream& os, const PhysicalNumber& pn)
+std::ostream& ariel::operator<<(ostream& os, const PhysicalNumber& pn)
 {
     return (os<<pn.getNum()<<"["<<units[pn.getSpecificUnit()]<<"]");
 }
-istream& operator>>(istream& os, PhysicalNumber& pn)
+std::istream& ariel::operator>>(istream& is, PhysicalNumber& pn)
 {
-
+    return is;
 }
 
 double PhysicalNumber::getNum()const
@@ -228,6 +227,7 @@ double PhysicalNumber::convertLength() const
         break;
     case 2:
         convertNum = num * 100000;
+    
         break;
     }
     return convertNum;
@@ -269,7 +269,7 @@ double PhysicalNumber::convertWeight() const
 }
 
 double PhysicalNumber::cmToM(double number) const { return number / 100; }
-double PhysicalNumber::cmToKM(double number) const { return number / 10000; }
+double PhysicalNumber::cmToKM(double number) const { return number / 100000; }
 double PhysicalNumber::sToMIN(double number) const { return number / 60; }
 double PhysicalNumber::sToHOUR(double number) const { return number / 3600; }
 double PhysicalNumber::gToKG(double number) const { return number / 1000; }

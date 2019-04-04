@@ -1,4 +1,5 @@
 
+#pragma once
 namespace ariel {
 enum Unit{
     CM,

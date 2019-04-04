@@ -15,12 +15,25 @@ using ariel::PhysicalNumber, ariel::Unit;
 
 int main() {
 //cout << "dana";
-    PhysicalNumber a(1, Unit::M);   // 2 kilometers
-    PhysicalNumber b(100, Unit::CM);  // 300 meters
+    //PhysicalNumber a(1, Unit::M);   // 2 kilometers
+    //PhysicalNumber b(100, Unit::CM);  // 300 meters
     //PhysicalNumber c=a-b;
     //a+=b;
-    cout << "main: " <<a.getNum() << endl;   // Prints "2[km]"
-    cout << "main: " <<a<< endl;  
+    //cout << "main: " <<a.getNum() << endl;   // Prints "2[km]"
+    //cout << "main: " <<a<< endl;  
+
+    // PhysicalNumber a(2, Unit::KM);
+    // PhysicalNumber b(300, Unit::M);
+    // cout << "a:" <<a<<" b:"<<b<< endl;  
+    // cout <<"\n"<< (a+=b) << endl;  
+    string str ="danana";
+    string s="300[km]";
+    long pos=str.find("5") ;
+    cout <<"\n"<< str.find("5") <<" str len: "<<str.length()<< endl;  
+    if(pos>=0&&pos<str.length())
+      cout<<"horray";
+    
+    
 
     
   return 0;
