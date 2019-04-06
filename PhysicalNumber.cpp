@@ -43,6 +43,29 @@ PhysicalNumber PhysicalNumber::operator-() const
 {
     return PhysicalNumber(num * -1, unit);
 }
+PhysicalNumber& PhysicalNumber::operator++()
+{
+    num++;
+    return *this;
+}
+PhysicalNumber PhysicalNumber::operator++(int)
+{
+    PhysicalNumber pn(*this);
+    num++;
+    return pn;
+}
+PhysicalNumber& PhysicalNumber::operator--()
+{
+    num--;
+    return *this;
+}
+PhysicalNumber PhysicalNumber::operator--(int)
+{
+
+    PhysicalNumber pn(*this);
+    num--;
+    return pn;
+}
 
 bool PhysicalNumber::operator<(const PhysicalNumber &num2) const
 {
@@ -124,15 +147,20 @@ std::istream &ariel::operator>>(istream &input, PhysicalNumber &pn)
     }
     else
     {
+        if(new_unit.find(']')>new_unit.length())throw std::runtime_error("does");
+        bool flag=false;
+        cout<<"new unit"<<new_unit;
         for (i = 0; i < 9; i++)
         {
-            if (units[i]==new_unit.substr(0,new_unit.size()-1))
+            if ((units[i]==new_unit.substr(0,new_unit.size()-1))&&new_unit.compare(units[i])==1)
             {
-                //flag = true;
+                flag = true;
                 break;
             }
             
         }
+        if(!flag)throw std::runtime_error("does");
+
         pn.num = new_num;       
         pn.unit=Unit(i);
 

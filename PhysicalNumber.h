@@ -21,6 +21,11 @@ PhysicalNumber& operator+=(const PhysicalNumber& num2);
 PhysicalNumber operator-(const PhysicalNumber& num2)const;
 PhysicalNumber& operator-=(const PhysicalNumber& num2);
 PhysicalNumber operator-()const;
+PhysicalNumber& operator++();
+PhysicalNumber operator++(int);
+PhysicalNumber& operator--();
+PhysicalNumber operator--(int);
+
 bool operator<(const PhysicalNumber& num2)const;
 bool operator<=(const PhysicalNumber& num2)const;
 bool operator>(const PhysicalNumber& num2)const;
