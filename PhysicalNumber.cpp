@@ -11,9 +11,7 @@ int arr[9]={1,100,100000,1,60,3600,1,1000,1000000};
 PhysicalNumber PhysicalNumber::operator+(const PhysicalNumber &num2) const
 {
     if (!sameUnit(num2))
-    {
-        throw std::runtime_error("not the same units");
-    }
+    {throw std::runtime_error("not the same units");}
     //same unit different type
     double fin=num+num2.num*arr[num2.unit]/arr[unit];
     return PhysicalNumber(fin, unit);
@@ -105,7 +103,7 @@ bool PhysicalNumber::operator==(const PhysicalNumber &num2) const
 
 std::ostream &ariel::operator<<(ostream &os, const PhysicalNumber &pn)
 {
-    return (os << pn.getNum() << "[" << units[pn.getSpecificUnit()] << "]");
+    return (os << pn.getNum() << "[" << units[pn.unit] << "]");
 }
 
 static istream &getAndCheckNextCharIs(istream &input, char expectedChar)
@@ -135,10 +133,6 @@ std::istream &ariel::operator>>(istream &input, PhysicalNumber &pn)
         (!(input >> new_unit)))// ||
         //(!(getAndCheckNextCharIs(input, ']'))))
     {
-        cout<<"new num"<<new_num<<endl;
-        
-        
-        cout<<new_unit<<endl;
         // rewind on error
         auto errorState = input.rdstate(); // remember error state
         input.clear();                     // clear error so seekg will work
@@ -149,36 +143,22 @@ std::istream &ariel::operator>>(istream &input, PhysicalNumber &pn)
     {
         if(new_unit.find(']')>new_unit.length())throw std::runtime_error("does");
         bool flag=false;
-        cout<<"new unit"<<new_unit;
         for (i = 0; i < 9; i++)
         {
             if ((units[i]==new_unit.substr(0,new_unit.size()-1))&&new_unit.compare(units[i])==1)
             {
                 flag = true;
                 break;
-            }
-            
+            }        
         }
         if(!flag)throw std::runtime_error("does");
-
         pn.num = new_num;       
         pn.unit=Unit(i);
-
     }
-
     return input;
 }
-
-double PhysicalNumber::getNum() const
-{
-    return num;
-}
-int PhysicalNumber::getSpecificUnit() const
-{
-    return unit;
-}
+double PhysicalNumber::getNum() const {return num;}
 ////////private methods///////
-
 bool PhysicalNumber::sameUnit(const PhysicalNumber &num2) const
 {
     return (unit / 3 == num2.unit / 3);
