@@ -128,6 +128,7 @@ std::istream &ariel::operator>>(istream &input, PhysicalNumber &pn)
     // remember place for rewinding
     ios::pos_type startPosition = input.tellg();
 
+
     if ((!(input >> new_num)) ||
         (!getAndCheckNextCharIs(input, '[')) ||
         (!(input >> new_unit)))// ||
@@ -141,8 +142,8 @@ std::istream &ariel::operator>>(istream &input, PhysicalNumber &pn)
     }
     else
     {
-        if(new_unit.find(']')>new_unit.length())throw std::runtime_error("does");
-        bool flag=false;
+        if(!(new_unit.find(']')>new_unit.length()))
+        {bool flag=false;
         for (i = 0; i < 9; i++)
         {
             if ((units[i]==new_unit.substr(0,new_unit.size()-1))&&new_unit.compare(units[i])==1)
@@ -151,9 +152,11 @@ std::istream &ariel::operator>>(istream &input, PhysicalNumber &pn)
                 break;
             }        
         }
-        if(!flag)throw std::runtime_error("does");
-        pn.num = new_num;       
+        if(flag)
+        {pn.num = new_num;       
         pn.unit=Unit(i);
+        }
+        }
     }
     return input;
 }
